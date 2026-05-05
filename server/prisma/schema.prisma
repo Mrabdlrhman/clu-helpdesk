@@ -1,0 +1,11 @@
+// Prisma schema for the helpdesk server.
+// Connection settings are defined in `prisma.config.ts` (Prisma 7+).
+
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
