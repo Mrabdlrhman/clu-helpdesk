@@ -6,7 +6,7 @@ AI-powered ticket management system. See `project-scope.md`, `tech-stack.md`, an
 
 - **Runtime / package manager:** Bun 1.3+ (workspaces). Not Node/npm.
 - **Server:** Express 5 + TypeScript, `server/` workspace, port **4000**.
-- **Client:** React 19 + Vite 6 + TypeScript + Tailwind v4 + React Router v7, `client/` workspace, port **5174** (`strictPort: true`).
+- **Client:** React 19 + Vite 6 + TypeScript + Tailwind v4 + React Router v7, `client/` workspace, port **5174** (Vite will auto-bump if taken).
 - **DB:** PostgreSQL via Prisma (added in Phase 4).
 - **AI:** Anthropic Claude API (added in Phase 5).
 - **Email:** SendGrid or Mailgun (Phase 6).
