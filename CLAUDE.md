@@ -31,8 +31,6 @@ bun install           # install all workspace deps
 bun run dev           # both apps in parallel
 bun run dev:server    # server only — http://localhost:4000
 bun run dev:client    # client only — http://localhost:5174
-bun run build         # build both
-bun run typecheck     # typecheck both
 ```
 
 ## Conventions
