@@ -8,5 +8,15 @@ export const auth = betterAuth({
     enabled: true,
     requireEmailVerification: false,
   },
+  user: {
+    additionalFields: {
+      role: {
+        type: ["ADMIN", "AGENT"],
+        required: false,
+        defaultValue: "AGENT",
+        input: false,
+      },
+    },
+  },
   trustedOrigins: ["http://localhost:5173", "http://localhost:5174"],
 });
