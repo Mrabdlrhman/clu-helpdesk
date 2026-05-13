@@ -1,7 +1,15 @@
 import { Navigate } from "react-router";
 import { useSession } from "../lib/auth";
 
-export default function RequireAuth({ children }: { children: React.ReactNode }) {
+type Role = "ADMIN" | "AGENT";
+
+export default function RequireAuth({
+  children,
+  role,
+}: {
+  children: React.ReactNode;
+  role?: Role;
+}) {
   const { data, isPending } = useSession();
 
   if (isPending) {
@@ -14,6 +22,10 @@ export default function RequireAuth({ children }: { children: React.ReactNode })
 
   if (!data) {
     return <Navigate to="/login" replace />;
+  }
+
+  if (role && data.user.role !== role) {
+    return <Navigate to="/" replace />;
   }
 
   return <>{children}</>;
