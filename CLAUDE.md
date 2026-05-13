@@ -7,20 +7,26 @@ AI-powered ticket management system. Keep work focused and avoid broad project s
 - Package manager/runtime: Bun 1.3+ workspaces
 - Server: Express 5 + TypeScript, `server/`, port 4000
 - Client: React 19 + Vite 6 + TypeScript + Tailwind v4 + React Router v7, `client/`, port 5174
-- DB: PostgreSQL via Prisma
+- DB: PostgreSQL via Prisma 7
+- Auth: better-auth (email/password)
+- Forms: react-hook-form + zod
+- UI: shadcn/ui (Radix, Nova preset, neutral) + Lucide icons
 - AI: Anthropic Claude API
 - Email: SendGrid or Mailgun
 
-## Repo layout
+## Key paths
 
-```text
-helpdesk/
-├── package.json
-├── server/
-│   └── src/index.ts
-└── client/
-    └── src/
-```
+- `server/src/index.ts` — Express entry, mounts `/api/auth/*splat`
+- `server/src/lib/auth.ts` — better-auth server instance
+- `server/src/lib/db.ts` — Prisma client (import from here, not from `generated/`)
+- `server/src/middleware/require-auth.ts` — `requireAuth`, sets `req.user`/`req.session`
+- `server/prisma/schema.prisma`, `server/prisma.config.ts`, `server/prisma/seed.ts`
+- `server/src/generated/prisma/` — generated, do not edit
+- `client/src/lib/auth.ts` — `useSession`, `signIn`, `signOut`
+- `client/src/components/RequireAuth.tsx` — client route guard
+- `client/src/components/ui/` — shadcn primitives
+- `client/src/pages/LoginPage.tsx` — reference form pattern
+- `client/components.json` — shadcn config
 
 ## Commands
 
@@ -39,9 +45,17 @@ bun run dev:client
 - Client API calls should use `/api/...`.
 - Vite proxies `/api/*` to `http://localhost:4000`.
 - Server is ESM. Use `import`, not `require`.
+- Server relative imports need `.js` suffix even for `.ts` files (e.g. `./lib/auth.js`).
+- Client imports inside `client/src` use the `@/` alias.
 - Bun runs TypeScript directly.
 - TypeScript is strict.
+- Do not run `bun run typecheck` reflexively — only when asked or risky.
 
+## Auth, DB, UI
+
+- **Auth:** protect server routes with `requireAuth`; wrap protected client routes in `<RequireAuth>`. Seed admin with `bun run --filter server db:seed`.
+- **DB:** Postgres connection in `prisma.config.ts`. Models (`User`, `Session`, `Account`, `Verification`) follow better-auth schema; `User.role` is `ADMIN | AGENT`.
+- **UI:** reuse shadcn primitives from `client/src/components/ui/` before hand-rolling. Add more with `bunx --bun shadcn@latest add <name>` from `client/`. Forms follow the `LoginPage.tsx` pattern (zodResolver, `aria-invalid`, destructive `Alert` for submit errors).
 
 ## Token-saving workflow
 
