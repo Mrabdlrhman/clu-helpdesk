@@ -56,6 +56,7 @@ bun run dev:client
 - **Auth:** protect server routes with `requireAuth`; wrap protected client routes in `<RequireAuth>`. Seed admin with `bun run --filter server db:seed`.
 - **DB:** Postgres connection in `prisma.config.ts`. Models (`User`, `Session`, `Account`, `Verification`) follow better-auth schema; `User.role` is `ADMIN | AGENT`.
 - **UI:** reuse shadcn primitives from `client/src/components/ui/` before hand-rolling. Add more with `bunx --bun shadcn@latest add <name>` from `client/`. Forms follow the `LoginPage.tsx` pattern (zodResolver, `aria-invalid`, destructive `Alert` for submit errors).
+- **Data fetching:** use `axios` + `@tanstack/react-query` (`useQuery`/`useMutation`) for server state — not raw `fetch` or `useEffect`.
 
 ## Token-saving workflow
 
