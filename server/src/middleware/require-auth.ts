@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import { fromNodeHeaders } from "better-auth/node";
 import { auth } from "../lib/auth.js";
+import { prisma } from "../lib/db.js";
 
 type AuthSession = NonNullable<Awaited<ReturnType<typeof auth.api.getSession>>>;
 
@@ -19,6 +20,15 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
   });
 
   if (!result) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
+
+  const fresh = await prisma.user.findUnique({
+    where: { id: result.user.id },
+    select: { deletedAt: true },
+  });
+  if (!fresh || fresh.deletedAt) {
     res.status(401).json({ error: "Unauthorized" });
     return;
   }
