@@ -4,9 +4,10 @@ AI-powered ticket management system. Keep work focused and avoid broad project s
 
 ## Stack
 
-- Package manager/runtime: Bun 1.3+ workspaces
+- Package manager/runtime: Bun 1.3+ workspaces (`client/`, `core/`, `server/`)
 - Server: Express 5 + TypeScript, `server/`, port 4000
 - Client: React 19 + Vite 6 + TypeScript + Tailwind v4 + React Router v7, `client/`, port 5174
+- Shared: `@helpdesk/core` package at `core/` — zod schemas and types shared by client + server
 - DB: PostgreSQL via Prisma 7
 - Auth: better-auth (email/password)
 - Forms: react-hook-form + zod
@@ -22,6 +23,7 @@ AI-powered ticket management system. Keep work focused and avoid broad project s
 - `server/src/middleware/require-auth.ts` — `requireAuth`, sets `req.user`/`req.session`
 - `server/prisma/schema.prisma`, `server/prisma.config.ts`, `server/prisma/seed.ts`
 - `server/src/generated/prisma/` — generated, do not edit
+- `core/src/schemas/` — shared zod schemas (e.g. `user.ts` exports `createUserSchema`, `CreateUserInput`); re-exported from `core/src/index.ts`
 - `client/src/lib/auth.ts` — `useSession`, `signIn`, `signOut`
 - `client/src/components/RequireAuth.tsx` — client route guard
 - `client/src/components/ui/` — shadcn primitives
@@ -47,6 +49,7 @@ bun run dev:client
 - Server is ESM. Use `import`, not `require`.
 - Server relative imports need `.js` suffix even for `.ts` files (e.g. `./lib/auth.js`).
 - Client imports inside `client/src` use the `@/` alias.
+- Define any zod schema that's used by both client and server in `@helpdesk/core` (under `core/src/schemas/`), re-export it from `core/src/index.ts`, and import it as `import { fooSchema } from "@helpdesk/core"` on both sides. Do not duplicate a schema in client and server. Schemas exclusive to one side may stay local.
 - Bun runs TypeScript directly.
 - TypeScript is strict.
 - Do not run `bun run typecheck` reflexively — only when asked or risky.

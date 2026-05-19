@@ -2,6 +2,7 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { AlertCircle } from "lucide-react";
 import NavBar from "../components/NavBar";
+import CreateUserDialog from "@/components/CreateUserDialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Table,
@@ -45,7 +46,10 @@ export default function UsersPage() {
       <NavBar />
       <main className="p-8 flex justify-center">
         <div className="max-w-5xl w-full space-y-6">
-          <h1 className="text-3xl font-bold">Users</h1>
+          <div className="flex items-center justify-between">
+            <h1 className="text-3xl font-bold">Users</h1>
+            <CreateUserDialog />
+          </div>
 
           {error && (
             <Alert variant="destructive">
