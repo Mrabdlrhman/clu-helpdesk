@@ -2,7 +2,7 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { AlertCircle } from "lucide-react";
 import NavBar from "../components/NavBar";
-import CreateUserDialog from "@/components/CreateUserDialog";
+import UserFormDialog from "@/components/UserFormDialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Table,
@@ -12,14 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-type UserRow = {
-  id: string;
-  name: string;
-  email: string;
-  role: "ADMIN" | "AGENT";
-  createdAt: string;
-};
+import type { UserRow } from "@/lib/users";
 
 async function fetchUsers(): Promise<UserRow[]> {
   const res = await axios.get<{ users: UserRow[] }>("/api/users");
@@ -48,7 +41,7 @@ export default function UsersPage() {
         <div className="max-w-5xl w-full space-y-6">
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-bold">Users</h1>
-            <CreateUserDialog />
+            <UserFormDialog mode="create" />
           </div>
 
           {error && (
@@ -71,6 +64,7 @@ export default function UsersPage() {
                     <TableHead>Email</TableHead>
                     <TableHead>Role</TableHead>
                     <TableHead>Created</TableHead>
+                    <TableHead className="w-12 text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -82,12 +76,15 @@ export default function UsersPage() {
                       <TableCell>
                         {new Date(u.createdAt).toLocaleDateString()}
                       </TableCell>
+                      <TableCell className="text-right">
+                        <UserFormDialog mode="edit" user={u} />
+                      </TableCell>
                     </TableRow>
                   ))}
                   {users.length === 0 && (
                     <TableRow>
                       <TableCell
-                        colSpan={4}
+                        colSpan={5}
                         className="text-center text-muted-foreground"
                       >
                         No users found.
