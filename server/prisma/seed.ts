@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { auth } from "../src/lib/auth.js";
 import { prisma } from "../src/lib/db.js";
-import { Role } from "../src/generated/prisma/client.js";
+import { Role } from "@helpdesk/core";
 
 async function main() {
   const email = process.env.SEED_ADMIN_EMAIL;

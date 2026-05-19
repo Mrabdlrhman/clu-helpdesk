@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { AlertCircle } from "lucide-react";
+import { Role } from "@helpdesk/core";
 import NavBar from "../components/NavBar";
 import UserFormDialog from "@/components/UserFormDialog";
 import DeleteUserDialog from "@/components/DeleteUserDialog";
@@ -80,7 +81,7 @@ export default function UsersPage() {
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-1">
                           <UserFormDialog mode="edit" user={u} />
-                          {u.role !== "ADMIN" ? (
+                          {u.role !== Role.ADMIN ? (
                             <DeleteUserDialog user={u} />
                           ) : (
                             <div aria-hidden className="size-9" />

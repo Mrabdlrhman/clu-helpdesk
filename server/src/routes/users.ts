@@ -1,6 +1,6 @@
 import { Router, type Request, type Response, type NextFunction } from "express";
 import { hashPassword } from "better-auth/crypto";
-import { createUserSchema, updateUserSchema } from "@helpdesk/core";
+import { createUserSchema, updateUserSchema, Role } from "@helpdesk/core";
 import { auth } from "../lib/auth.js";
 import { prisma } from "../lib/db.js";
 import { requireAuth } from "../middleware/require-auth.js";
@@ -152,7 +152,7 @@ usersRouter.delete(
       return;
     }
 
-    if (target.role === "ADMIN") {
+    if (target.role === Role.ADMIN) {
       res.status(403).json({ error: "Admin users cannot be deleted" });
       return;
     }

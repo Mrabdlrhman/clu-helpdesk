@@ -1,11 +1,12 @@
 import { Link, useNavigate } from "react-router";
+import { Role } from "@helpdesk/core";
 import { signOut, useSession } from "../lib/auth";
 
 export default function NavBar() {
   const navigate = useNavigate();
   const { data } = useSession();
   const name = data?.user.name ?? data?.user.email ?? "";
-  const isAdmin = data?.user.role === "ADMIN";
+  const isAdmin = data?.user.role === Role.ADMIN;
 
   async function handleSignOut() {
     await signOut();

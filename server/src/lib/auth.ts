@@ -1,5 +1,6 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
+import { ROLES, Role } from "@helpdesk/core";
 import { prisma } from "./db.js";
 
 const trustedOrigins = (process.env.BETTER_AUTH_TRUSTED_ORIGINS ?? "")
@@ -20,9 +21,9 @@ export const auth = betterAuth({
   user: {
     additionalFields: {
       role: {
-        type: ["ADMIN", "AGENT"],
+        type: [...ROLES],
         required: false,
-        defaultValue: "AGENT",
+        defaultValue: Role.AGENT,
         input: false,
       },
     },

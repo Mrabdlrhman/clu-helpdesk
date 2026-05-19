@@ -23,7 +23,7 @@ AI-powered ticket management system. Keep work focused and avoid broad project s
 - `server/src/middleware/require-auth.ts` — `requireAuth`, sets `req.user`/`req.session`
 - `server/prisma/schema.prisma`, `server/prisma.config.ts`, `server/prisma/seed.ts`
 - `server/src/generated/prisma/` — generated, do not edit
-- `core/src/schemas/` — shared zod schemas (e.g. `user.ts` exports `createUserSchema`, `CreateUserInput`); re-exported from `core/src/index.ts`
+- `core/src/schemas/` — shared zod schemas and enums (e.g. `user.ts` exports `createUserSchema`, `CreateUserInput`; `role.ts` exports `Role`, `ROLES`, `roleSchema`); re-exported from `core/src/index.ts`
 - `client/src/lib/auth.ts` — `useSession`, `signIn`, `signOut`
 - `client/src/components/RequireAuth.tsx` — client route guard
 - `client/src/components/ui/` — shadcn primitives
@@ -50,6 +50,7 @@ bun run dev:client
 - Server relative imports need `.js` suffix even for `.ts` files (e.g. `./lib/auth.js`).
 - Client imports inside `client/src` use the `@/` alias.
 - Define any zod schema that's used by both client and server in `@helpdesk/core` (under `core/src/schemas/`), re-export it from `core/src/index.ts`, and import it as `import { fooSchema } from "@helpdesk/core"` on both sides. Do not duplicate a schema in client and server. Schemas exclusive to one side may stay local.
+- Shared enums/constants used by both client and server (e.g. `Role`, `ROLES`) also live in `@helpdesk/core`. Do not import enums from `server/src/generated/prisma/` (server-only, generated) or hardcode the string literals — use `import { Role } from "@helpdesk/core"` everywhere, including in the seed script and better-auth `additionalFields`.
 - Bun runs TypeScript directly.
 - TypeScript is strict.
 - Do not run `bun run typecheck` reflexively — only when asked or risky.
@@ -57,7 +58,7 @@ bun run dev:client
 ## Auth, DB, UI
 
 - **Auth:** protect server routes with `requireAuth`; wrap protected client routes in `<RequireAuth>`. Seed admin with `bun run --filter server db:seed`.
-- **DB:** Postgres connection in `prisma.config.ts`. Models (`User`, `Session`, `Account`, `Verification`) follow better-auth schema; `User.role` is `ADMIN | AGENT`.
+- **DB:** Postgres connection in `prisma.config.ts`. Models (`User`, `Session`, `Account`, `Verification`) follow better-auth schema; `User.role` is the `Role` enum (`ADMIN | AGENT`) — import from `@helpdesk/core`.
 - **UI:** reuse shadcn primitives from `client/src/components/ui/` before hand-rolling. Add more with `bunx --bun shadcn@latest add <name>` from `client/`. Forms follow the `LoginPage.tsx` pattern (zodResolver, `aria-invalid`, destructive `Alert` for submit errors).
 - **Data fetching:** use `axios` + `@tanstack/react-query` (`useQuery`/`useMutation`) for server state — not raw `fetch` or `useEffect`.
 

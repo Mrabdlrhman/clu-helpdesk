@@ -1,7 +1,6 @@
 import { Navigate } from "react-router";
+import type { Role } from "@helpdesk/core";
 import { useSession } from "../lib/auth";
-
-type Role = "ADMIN" | "AGENT";
 
 export default function RequireAuth({
   children,
