@@ -1,6 +1,6 @@
 # Helpdesk — Claude Project Notes
 
-AI-powered ticket management system. Keep work focused and avoid broad project scans.
+A ticket management system that uses AI to classify, respond to, and route support tickets. See `project-scope.md` for full requirements and `implementation-plan.md` for phased task breakdown.
 
 ## Stack
 
@@ -13,7 +13,6 @@ AI-powered ticket management system. Keep work focused and avoid broad project s
 - Forms: react-hook-form + zod
 - UI: shadcn/ui (Radix, Nova preset, neutral) + Lucide icons
 - AI: Anthropic Claude API
-- Email: SendGrid or Mailgun
 
 ## Key paths
 

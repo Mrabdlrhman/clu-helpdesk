@@ -3,6 +3,7 @@ import { toNodeHandler } from "better-auth/node";
 import { auth } from "./lib/auth.js";
 import { requireAuth } from "./middleware/require-auth.js";
 import { usersRouter } from "./routes/users.js";
+import { webhooksRouter } from "./routes/webhooks.js";
 
 const app = express();
 const PORT = Number(process.env.PORT ?? 4000);
@@ -20,6 +21,10 @@ app.get("/api/me", requireAuth, (req: Request, res: Response) => {
 });
 
 app.use("/api/users", usersRouter);
+
+// Public webhook surface. Auth is provided per-route by `requireWebhookSecret`
+// (shared-secret header), not `requireAuth`.
+app.use("/api/webhooks", webhooksRouter);
 
 app.use((_req: Request, res: Response) => {
   res.status(404).json({ error: "Not Found" });
